@@ -1,0 +1,35 @@
+= acts_as_citable
+
+
+
+== Testing
+Acts As Citable uses RSpec for its test coverage. Inside the plugin directory you can run the specs with
+
+  rake spec
+
+If you already have RSpec on your application, the specs will run with 
+
+  rake spec:plugins
+
+== Usage
+
+  class Building < ActiveRecord::Base
+	# Alias for <tt>acts_as_citable</tt>
+	acts_as_citable 
+  end
+
+  @building = Building.new(:building_name => "Wayne's House")
+  @building.cite_list = "132904,238894"
+  @building.save
+
+  @building.cites # => [<Citation id:"132904">, <Citation id:"238894">]
+
+=== Finding Cited Objects
+Acts As Citable utilized named_scopes to create an association for tag, enabling you to mix and match to filter down your results. 
+
+  class Building < ActiveRecord::Base
+	acts_as_citable :citations
+	named_scope :by_join_date, :order => "created_ad DESC"
+  end
+
+  Building.cited_with("132904").by_date
